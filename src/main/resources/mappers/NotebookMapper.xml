@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+    "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ 
+<mapper namespace="dao.NoteBookDAO">
+  <select id="findNoteBooksByUserId" parameterType="string" resultType="map">
+      select
+        cn_notebook_id id,
+        cn_notebook_name "name"
+      from cn_notebook
+      where cn_user_id=#{userId}
+  </select>
+  <select id="findNotebookById" resultType="entity.NoteBook">
+   SELECT
+    	cn_notebook_id id,
+	    cn_user_id     userId, 
+		cn_notebook_type_id typeId,
+		cn_notebook_name name,
+		cn_notebook_desc descr,
+		cn_notebook_createtime createtime
+   FROM
+    	cn_notebook 
+   WHERE
+    	cn_notebook_id=#{id}
+  </select>
+  <delete id="deleteNotebookByid" parameterType="string">
+    DELETE FROM
+       cn_notebook
+    WHERE
+         cn_notebook_id=#{id}
+  </delete>
+  <select id="findNoteBooksByParam" parameterType="map" resultType="map" >
+       SELECT
+          cn_notebook_id id,
+          cn_notebook_name name
+       FROM
+          ${tableName}
+       WHERE
+          cn_user_id=#{userId}
+       <if test="start!=null">
+        LIMIT
+           #{start},#{size}
+       </if>  
+  </select>
+  <!-- 自增id -->
+  <insert id="savePerson" keyProperty="id" useGeneratedKeys="true">
+    insert into person(
+     person_id,
+     person_name,
+     person_age
+    )values(
+    null,#{name},#{age}
+    )
+  </insert>
+</mapper>  
